@@ -29,7 +29,7 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authz -> authz
                 // Allow public access to authentication endpoints
-                .requestMatchers("/api/register", "/api/login").permitAll()
+                .requestMatchers("/api/auth/**").permitAll()
                 // Allow preflight requests
                 .requestMatchers("OPTIONS", "/**").permitAll()
                 // All other requests need authentication

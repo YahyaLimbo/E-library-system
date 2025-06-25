@@ -15,7 +15,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long iduser;
 
-     @Column(name = "usernam", nullable = false, unique = true)  // 💡 map to DB column name
+    @Column(name = "username", nullable = false, unique = true)  // 💡 map to DB column name
     private String username;
     @Column(name = "email", nullable = false, unique = true)  // 💡 map to DB column name@Column(nullable = false, unique = true)
     private String email;

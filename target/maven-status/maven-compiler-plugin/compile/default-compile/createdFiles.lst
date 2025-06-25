@@ -2,7 +2,6 @@ com\mycompany\treviska\JwtService.class
 com\mycompany\treviska\JwtConfig.class
 com\mycompany\treviska\Treviska.class
 com\mycompany\treviska\AuthenticationResponseDto.class
-com\mycompany\treviska\SecurityConfig.class
 com\mycompany\treviska\UserService.class
 com\mycompany\treviska\UserRegistrationService.class
 com\mycompany\treviska\AuthenticationService.class
@@ -15,6 +14,7 @@ com\mycompany\treviska\UserProfileController.class
 com\mycompany\treviska\RegistrationRequestDto.class
 com\mycompany\treviska\RegistrationResponseDto.class
 com\mycompany\treviska\RegisterController.class
+com\mycompany\treviska\config\SecurityConfig.class
 com\mycompany\treviska\UserRepository.class
 com\mycompany\treviska\AuthenticationRequestDto.class
 com\mycompany\treviska\AuthController.class

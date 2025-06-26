@@ -1,6 +1,9 @@
 // UserProfileController.java
-package com.mycompany.treviska;
+package com.mycompany.treviska.Controller;
 
+import com.mycompany.treviska.Service.UserService;
+import com.mycompany.treviska.security.UserMapper;
+import com.mycompany.treviska.security.UserProfileDto;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;

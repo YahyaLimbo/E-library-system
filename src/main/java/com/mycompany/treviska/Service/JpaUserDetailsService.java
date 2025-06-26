@@ -1,6 +1,7 @@
 // JpaUserDetailsService.java
-package com.mycompany.treviska;
+package com.mycompany.treviska.Service;
 
+import com.mycompany.treviska.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

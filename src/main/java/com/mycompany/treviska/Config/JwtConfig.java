@@ -1,5 +1,6 @@
-package com.mycompany.treviska;
+package com.mycompany.treviska.Config;
 
+import com.mycompany.treviska.Service.JwtService;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;

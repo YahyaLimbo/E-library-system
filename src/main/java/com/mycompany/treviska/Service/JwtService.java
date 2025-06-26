@@ -1,5 +1,5 @@
 // JwtService.java
-package com.mycompany.treviska;
+package com.mycompany.treviska.Service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;

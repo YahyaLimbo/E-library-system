@@ -1,6 +1,10 @@
 // RegistrationController.java
-package com.mycompany.treviska;
+package com.mycompany.treviska.Controller;
 
+import com.mycompany.treviska.security.RegistrationMapper;
+import com.mycompany.treviska.security.RegistrationRequestDto;
+import com.mycompany.treviska.security.RegistrationResponseDto;
+import com.mycompany.treviska.Service.UserRegistrationService;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;

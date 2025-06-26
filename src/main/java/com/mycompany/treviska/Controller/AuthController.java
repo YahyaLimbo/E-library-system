@@ -1,6 +1,9 @@
 
-package com.mycompany.treviska;
+package com.mycompany.treviska.Controller;
 
+import com.mycompany.treviska.security.AuthenticationRequestDto;
+import com.mycompany.treviska.security.AuthenticationResponseDto;
+import com.mycompany.treviska.Service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;

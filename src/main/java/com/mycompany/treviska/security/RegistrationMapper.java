@@ -1,6 +1,9 @@
 // UserRegistrationMapper.java
-package com.mycompany.treviska;
+package com.mycompany.treviska.security;
 
+import com.mycompany.treviska.User;
+import com.mycompany.treviska.security.RegistrationRequestDto;
+import com.mycompany.treviska.security.RegistrationResponseDto;
 import org.springframework.stereotype.Component;
 
 @Component

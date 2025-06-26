@@ -1,5 +1,5 @@
 // RegistrationRequestDto.java
-package com.mycompany.treviska;
+package com.mycompany.treviska.security;
 
 public record RegistrationRequestDto(
         String username,

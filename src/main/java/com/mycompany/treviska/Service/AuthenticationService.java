@@ -1,12 +1,15 @@
 // AuthenticationService.java
-package com.mycompany.treviska;
+package com.mycompany.treviska.Service;
 
+import com.mycompany.treviska.Service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import com.mycompany.treviska.AuthenticationResponseDto;
-import com.mycompany.treviska.AuthenticationRequestDto;
+import com.mycompany.treviska.security.AuthenticationResponseDto;
+import com.mycompany.treviska.security.AuthenticationRequestDto;
+import com.mycompany.treviska.security.AuthenticationRequestDto;
+import com.mycompany.treviska.security.AuthenticationResponseDto;
 
 @Service
 @RequiredArgsConstructor

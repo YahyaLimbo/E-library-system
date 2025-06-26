@@ -1,5 +1,6 @@
-package com.mycompany.treviska.config;
+package com.mycompany.treviska;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,12 +15,19 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 
 import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    @Autowired
+    private JpaUserDetailsService jpaUserDetailsService;
+
+    @Autowired
+    private JwtDecoder jwtDecoder;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -30,10 +38,17 @@ public class SecurityConfig {
             .authorizeHttpRequests(authz -> authz
                 // Allow public access to authentication endpoints
                 .requestMatchers("/api/auth/**").permitAll()
+                // Allow test endpoint for debugging
+                .requestMatchers("/api/test/**").permitAll()
                 // Allow preflight requests
                 .requestMatchers("OPTIONS", "/**").permitAll()
                 // All other requests need authentication
                 .anyRequest().authenticated()
+            )
+            .oauth2ResourceServer(oauth2 -> oauth2
+                .jwt(jwt -> jwt
+                    .decoder(jwtDecoder)
+                )
             );
         
         return http.build();
@@ -48,9 +63,15 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
-    
     }
-   
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(jpaUserDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

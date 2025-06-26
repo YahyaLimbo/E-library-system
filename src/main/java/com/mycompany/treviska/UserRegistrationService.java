@@ -24,7 +24,11 @@ public class UserRegistrationService {
       }
 
       user.setPassword(passwordEncoder.encode(user.getPassword()));
-
+      
+      // Set default role if not specified
+      if (user.getRole() == null) {
+          user.setRole(User.UserRole.user);
+      }
       return userRepository.save(user);
   }
 }

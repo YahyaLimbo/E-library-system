@@ -13,20 +13,21 @@ import java.time.Instant;
 public class JwtService {
 
     private final String issuer;
-
     private final Duration ttl;
-
     private final JwtEncoder jwtEncoder;
 
     public String generateToken(final String username) {
+        final var now = Instant.now();
+        
         final var claimsSet = JwtClaimsSet.builder()
                 .subject(username)
                 .issuer(issuer)
-                .expiresAt(Instant.now().plus(ttl))
+                .issuedAt(now)  // Add issued at claim
+                .expiresAt(now.plus(ttl))
+                .claim("scope", "USER")  // Add scope claim
                 .build();
 
         return jwtEncoder.encode(JwtEncoderParameters.from(claimsSet))
           .getTokenValue();
     }
-
 }

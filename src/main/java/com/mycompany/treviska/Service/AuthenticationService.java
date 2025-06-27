@@ -1,7 +1,6 @@
 // AuthenticationService.java
 package com.mycompany.treviska.Service;
 
-import com.mycompany.treviska.Service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.security.authentication.AuthenticationManager;

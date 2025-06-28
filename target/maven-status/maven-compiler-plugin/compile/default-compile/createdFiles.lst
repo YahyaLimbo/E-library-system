@@ -13,6 +13,7 @@ com\mycompany\treviska\Service\JwtService.class
 com\mycompany\treviska\Material$MaterialType.class
 com\mycompany\treviska\Config\SecurityConfig.class
 com\mycompany\treviska\MaterialRepository.class
+com\mycompany\treviska\MaterialController.class
 com\mycompany\treviska\UpdateMaterialRequest.class
 com\mycompany\treviska\Service\UserService.class
 com\mycompany\treviska\CreateMaterialRequest.class

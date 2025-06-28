@@ -55,11 +55,11 @@ public class Material {
     private String language;
     
     @CreatedDate
-    @Column(name = "created_at", updatable = false)
+    @Column(name = "createdat", updatable = false)
     private LocalDateTime createdAt;
     
     @LastModifiedDate
-    @Column(name = "updated_at")
+    @Column(name = "updatedat")
     private LocalDateTime updatedAt;
     
     // Enums matching your database schema

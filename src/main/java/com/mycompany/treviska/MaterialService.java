@@ -230,5 +230,17 @@ public class MaterialService {
         private List<Object[]> materialsByType;
         private List<Object[]> materialsByFormat;
     }
-    
+    public Page<MaterialResponse> getAllMaterials(Pageable pageable) {
+    Page<Material> materialPage = materialRepository.findAll(pageable);
+    return materialPage.map(this::convertToResponse);
+}
+
+private MaterialResponse convertToResponse(Material material) {
+    return MaterialResponse.builder()
+        .materialid(material.getMaterialid())  // Make sure this matches your Material entity getter
+        .title(material.getTitle())
+        .author(material.getAuthor())
+        .identifier(material.getIdentifier())
+        .build();
+}
 }

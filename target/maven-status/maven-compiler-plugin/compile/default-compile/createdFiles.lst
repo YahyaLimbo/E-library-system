@@ -7,6 +7,7 @@ com\mycompany\treviska\security\RegistrationRequestDto.class
 com\mycompany\treviska\MaterialService.class
 com\mycompany\treviska\security\AuthenticationRequestDto.class
 com\mycompany\treviska\User.class
+com\mycompany\treviska\PageableResponse.class
 com\mycompany\treviska\MaterialResponse.class
 com\mycompany\treviska\Service\UserRegistrationService.class
 com\mycompany\treviska\Service\JwtService.class
@@ -31,3 +32,4 @@ com\mycompany\treviska\Service\JpaUserDetailsService.class
 com\mycompany\treviska\Controller\RegisterController.class
 com\mycompany\treviska\User$UserRole.class
 com\mycompany\treviska\Config\JwtConfig.class
+com\mycompany\treviska\MaterialResponse$MaterialResponseBuilder.class

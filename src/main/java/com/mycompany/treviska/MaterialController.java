@@ -12,7 +12,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
-
+import org.springframework.web.multipart.MultipartFile;  
+import org.springframework.core.io.Resource;              
+import org.springframework.http.HttpHeaders;             
+import org.springframework.http.MediaType; 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/materials")
@@ -20,6 +23,7 @@ import jakarta.validation.ValidationException;
 
 public class MaterialController {
     private final MaterialService materialService;
+    private final MaterialFileService materialFileService;
     @GetMapping("/{id}")
     public ResponseEntity<MaterialResponse> getMaterial (@PathVariable Long id)
     {
@@ -216,4 +220,77 @@ public class MaterialController {
                 .map(material -> ResponseEntity.ok(material))
                 .orElse(ResponseEntity.notFound().build());
     }
+    // === FILE MANAGEMENT ENDPOINTS ===
+
+// Upload file for a material
+@PostMapping("/{id}/files")
+public ResponseEntity<MaterialFileResponse> uploadFile(
+        @PathVariable Long id,
+        @RequestParam("file") MultipartFile file,
+        @RequestParam(required = false) Boolean isPrimary) {
+    try {
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        
+        FileUploadRequest request = FileUploadRequest.builder()
+                .isPrimary(isPrimary != null ? isPrimary : false)
+                .build();
+        
+        MaterialFileResponse uploadedFile = materialFileService.uploadFile(id, file, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(uploadedFile);
+        
+    } catch (ValidationException e) {
+        return ResponseEntity.badRequest().build();
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.status(500).build();
+    }
+}
+
+// Get all files for a material
+@GetMapping("/{id}/files")
+public ResponseEntity<List<MaterialFileResponse>> getFilesByMaterial(@PathVariable Long id) {
+    List<MaterialFileResponse> files = materialFileService.getFilesByMaterialId(id);
+    return ResponseEntity.ok(files);
+}
+
+// Download a specific file
+@GetMapping("/files/{fileId}/download")
+public ResponseEntity<Resource> downloadFile(@PathVariable Long fileId) {
+    try {
+        FileDownloadResponse fileResponse = materialFileService.getFileForDownload(fileId);
+        
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(fileResponse.getMimeType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION, 
+                       "attachment; filename=\"" + fileResponse.getFileName() + "\"")
+                .body(fileResponse.getResource());
+                
+    } catch (ValidationException e) {
+        return ResponseEntity.notFound().build();
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.status(500).build();
+    }
+}
+
+// Preview a file (inline display)
+@GetMapping("/files/{fileId}/preview")
+public ResponseEntity<Resource> previewFile(@PathVariable Long fileId) {
+    try {
+        FileDownloadResponse fileResponse = materialFileService.getFileForDownload(fileId);
+        
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(fileResponse.getMimeType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline")
+                .body(fileResponse.getResource());
+                
+    } catch (ValidationException e) {
+        return ResponseEntity.notFound().build();
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.status(500).build();
+    }
+}
 }

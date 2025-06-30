@@ -29,9 +29,9 @@ public class JwtService {
         
         // Create scope based on user role
         String scope = switch (user.getRole()) {
-            case admin -> "SCOPE_ADMIN";
-            case user -> "SCOPE_USER";
-            default -> "SCOPE_USER";
+            case admin -> "ADMIN USER";
+            case user -> "USER";
+            default -> "USER";
         };
         
         System.out.println("=== JWT TOKEN GENERATION ===");

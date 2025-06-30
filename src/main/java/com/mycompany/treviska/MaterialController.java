@@ -70,6 +70,7 @@ public class MaterialController {
     /**
      * PUBLIC: Get all materials (limited info, no authentication required)
      */
+    @PreAuthorize("hasAuthority('SCOPE_USER') or hasAuthority('SCOPE_ADMIN')")
     @GetMapping("/public")
     public ResponseEntity<Page<MaterialSummary>> getAllMaterialsPublic(
             @RequestParam(defaultValue = "0") int page,
@@ -88,10 +89,7 @@ public class MaterialController {
         
         return ResponseEntity.ok(materialPage);
     }
-
-    /**
-     * PUBLIC: Search materials (basic search, no authentication required)
-     */
+    @PreAuthorize("hasAnyAuthority('SCOPE_USER', 'SCOPE_ADMIN')")
     @PostMapping("/public/search")
     public ResponseEntity<Page<MaterialSummary>> searchMaterialsPublic(
             @RequestBody MaterialSearchRequest searchRequest,
@@ -110,7 +108,7 @@ public class MaterialController {
 
     // MODIFY THIS - Add authentication requirement
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('SCOPE_USER')") 
+    @PreAuthorize("hasAnyAuthority('SCOPE_USER', 'SCOPE_ADMIN')")
     public ResponseEntity<MaterialResponse> getMaterial(
             @PathVariable Long id,
             Authentication authentication) {  // ADD Authentication parameter
@@ -126,7 +124,7 @@ public class MaterialController {
 
     // MODIFY THIS - Add security for creating materials
     @PostMapping
-    @PreAuthorize("hasAnyRole('SCOPE_USER','SCOPE_ADMIN')")  // ADD THIS
+    @PreAuthorize("hasAnyAuthority('SCOPE_USER','SCOPE_ADMIN')")  // ADD THIS
     public ResponseEntity<MaterialResponse> createMaterial(
             @Valid @RequestBody CreateMaterialRequest request,
             Authentication authentication) {  // ADD Authentication parameter
@@ -158,7 +156,7 @@ public class MaterialController {
     
     // MODIFY THIS - Add security for updating materials
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('SCOPE_ADMIN')")  // ADD THIS
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")  // ADD THIS
     public ResponseEntity<MaterialResponse> updateMaterial(
             @PathVariable Long id,
             @Valid @RequestBody UpdateMaterialRequest request,
@@ -183,7 +181,7 @@ public class MaterialController {
     
     // MODIFY THIS - Add security for deleting materials
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('SCOPE_ADMIN')")  // ADD THIS - Only admins can delete
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")  // ADD THIS - Only admins can delete
     public ResponseEntity<MaterialResponse> deleteMaterial(
             @PathVariable Long id,
             Authentication authentication) {  // ADD Authentication parameter
@@ -227,7 +225,7 @@ public ResponseEntity<Map<String, Object>> debugAuth(Authentication authenticati
 
     // MODIFY THIS - Add authentication requirement
     @GetMapping
-    @PreAuthorize("hasAnyRole('SCOPE_USER','SCOPE_ADMIN')")  // ADD THIS
+    @PreAuthorize("hasAnyAuthority('SCOPE_USER','SCOPE_ADMIN')")  // ADD THIS
     public ResponseEntity<Page<MaterialResponse>> getAllMaterials(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "15") int size,
@@ -249,7 +247,7 @@ public ResponseEntity<Map<String, Object>> debugAuth(Authentication authenticati
 
     // MODIFY THIS - Add authentication requirement  
     @GetMapping("/custom")
-    @PreAuthorize("hasAnyRole('SCOPE_USER','SCOPE_ADMIN')")  // ADD THIS
+    @PreAuthorize("hasAnyAuthority('SCOPE_USER','SCOPE_ADMIN')")  // ADD THIS
     public ResponseEntity<PageableResponse<MaterialResponse>> getMaterialsCustom(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "15") int size,
@@ -283,7 +281,7 @@ public ResponseEntity<Map<String, Object>> debugAuth(Authentication authenticati
 
     // MODIFY THIS - Add authentication for advanced search
     @PostMapping("/search")
-    @PreAuthorize("hasAnyRole('SCOPE_USER','SCOPE_ADMIN')")  // ADD THIS
+    @PreAuthorize("hasAnyAuthority('SCOPE_USER', 'SCOPE_ADMIN')")   // ADD THIS
     public ResponseEntity<Page<MaterialSummary>> searchMaterials(
             @RequestBody MaterialSearchRequest searchRequest,
             @RequestParam(defaultValue = "0") int page,
@@ -303,7 +301,7 @@ public ResponseEntity<Map<String, Object>> debugAuth(Authentication authenticati
 
     // Search by title
     @GetMapping("/search/title")
-    @PreAuthorize("hasAnyRole('SCOPE_USER','SCOPE_ADMIN')")  
+    @PreAuthorize("hasAnyAuthority('SCOPE_USER', 'SCOPE_ADMIN')")   
     public ResponseEntity<List<MaterialSummary>> searchByTitle(@RequestParam String title) {
         List<MaterialSummary> materials = materialService.searchByTitle(title);
         return ResponseEntity.ok(materials);
@@ -311,7 +309,7 @@ public ResponseEntity<Map<String, Object>> debugAuth(Authentication authenticati
 
     // Search by author  
     @GetMapping("/search/author")
-    @PreAuthorize("hasAnyRole('SCOPE_USER','SCOPE_ADMIN')")  // OPTIONALLY ADD THIS
+    @PreAuthorize("hasAnyAuthority('SCOPE_USER','SCOPE_ADMIN')")  // OPTIONALLY ADD THIS
     public ResponseEntity<List<MaterialSummary>> searchByAuthor(@RequestParam String author) {
         List<MaterialSummary> materials = materialService.searchByAuthor(author);
         return ResponseEntity.ok(materials);
@@ -319,7 +317,7 @@ public ResponseEntity<Map<String, Object>> debugAuth(Authentication authenticati
 
     // Search by publisher
     @GetMapping("/search/publisher")
-    @PreAuthorize("hasANYRole('SCOPE_USER','SCOPE_ADMIN')")  // OPTIONALLY ADD THIS
+    @PreAuthorize("hasAnyAuthority('SCOPE_USER','SCOPE_ADMIN')")  // OPTIONALLY ADD THIS
     public ResponseEntity<List<MaterialSummary>> searchByPublisher(@RequestParam String publisher) {
         List<MaterialSummary> materials = materialService.searchByPublisher(publisher);
         return ResponseEntity.ok(materials);
@@ -327,7 +325,7 @@ public ResponseEntity<Map<String, Object>> debugAuth(Authentication authenticati
 
     // Search in summary/description
     @GetMapping("/search/summary")
-    @PreAuthorize("hasAnyRole('SCOPE_USER','SCOPE_ADMIN')")  // OPTIONALLY ADD THIS
+    @PreAuthorize("hasAnyAuthority('SCOPE_USER','SCOPE_ADMIN')")  // OPTIONALLY ADD THIS
     public ResponseEntity<List<MaterialSummary>> searchInSummary(@RequestParam String keyword) {
         List<MaterialSummary> materials = materialService.searchInSummary(keyword);
         return ResponseEntity.ok(materials);
@@ -335,7 +333,7 @@ public ResponseEntity<Map<String, Object>> debugAuth(Authentication authenticati
 
     // Get materials by type
     @GetMapping("/type/{type}")
-    @PreAuthorize("hasAnyRole('SCOPE_USER','SCOPE_ADMIN')")  // OPTIONALLY ADD THIS
+    @PreAuthorize("hasAnyAuthority('SCOPE_USER','SCOPE_ADMIN')")  // OPTIONALLY ADD THIS
     public ResponseEntity<List<MaterialSummary>> getMaterialsByType(@PathVariable String type) {
         try {
             Material.MaterialType materialType = Material.MaterialType.valueOf(type.toUpperCase());
@@ -348,7 +346,7 @@ public ResponseEntity<Map<String, Object>> debugAuth(Authentication authenticati
 
     // Get materials by format
     @GetMapping("/format/{format}")
-    @PreAuthorize("hasAnyRole('SCOPE_USER','SCOPE_ADMIN')")  // OPTIONALLY ADD THIS
+    @PreAuthorize("hasAnyAuthority('SCOPE_USER','SCOPE_ADMIN')")  // OPTIONALLY ADD THIS
     public ResponseEntity<List<MaterialSummary>> getMaterialsByFormat(@PathVariable String format) {
         try {
             Material.MaterialFormat materialFormat = Material.MaterialFormat.valueOf(format.toUpperCase());
@@ -361,7 +359,7 @@ public ResponseEntity<Map<String, Object>> debugAuth(Authentication authenticati
 
     
     @GetMapping("/recent")
-    @PreAuthorize("hasAnyRole('SCOPE_USER','SCOPE_ADMIN')")  // OPTIONALLY ADD THIS
+    @PreAuthorize("hasAnyAuthority('SCOPE_USER','SCOPE_ADMIN')")  // OPTIONALLY ADD THIS
     public ResponseEntity<List<MaterialSummary>> getRecentMaterials() {
         List<MaterialSummary> materials = materialService.getRecentMaterials();
         return ResponseEntity.ok(materials);
@@ -369,7 +367,7 @@ public ResponseEntity<Map<String, Object>> debugAuth(Authentication authenticati
 
     // MODIFY THIS - Add security for viewing detailed stats
     @GetMapping("/stats")
-    @PreAuthorize("hasRole('SCOPE_ADMIN')")  // ADD THIS
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")  // ADD THIS
     public ResponseEntity<MaterialService.MaterialStats> getMaterialStats(
             Authentication authentication) {  // ADD Authentication parameter
         
@@ -394,7 +392,7 @@ public ResponseEntity<Map<String, Object>> debugAuth(Authentication authenticati
 
     // Get material by identifier
     @GetMapping("/identifier/{identifier}")
-    @PreAuthorize("hasAnyRole('SCOPE_USER','SCOPE_ADMIN')")  // ADD THIS
+    @PreAuthorize("hasAnyAuthority('SCOPE_USER','SCOPE_ADMIN')")  // ADD THIS
     public ResponseEntity<MaterialResponse> getMaterialByIdentifier(
             @PathVariable String identifier,
             Authentication authentication) {  // ADD Authentication parameter
@@ -412,7 +410,7 @@ public ResponseEntity<Map<String, Object>> debugAuth(Authentication authenticati
      * Get materials created by current user
      */
     @GetMapping("/my-materials")
-    @PreAuthorize("hasRole('SCOPE_USER')")
+    @PreAuthorize("hasAuthority('SCOPE_USER')")
     public ResponseEntity<Page<MaterialResponse>> getMyMaterials(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "15") int size,
@@ -432,7 +430,7 @@ public ResponseEntity<Map<String, Object>> debugAuth(Authentication authenticati
      * Bulk create materials (Admin only)
      */
     @PostMapping("/bulk")
-    @PreAuthorize("hasRole('SCOPE_ADMIN')")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<List<MaterialResponse>> createMaterialsBulk(
             @Valid @RequestBody List<CreateMaterialRequest> requests,
             Authentication authentication) {
@@ -460,7 +458,7 @@ public ResponseEntity<Map<String, Object>> debugAuth(Authentication authenticati
 
     // MODIFY THIS - Add security for file upload
     @PostMapping("/{id}/files")
-    @PreAuthorize("hasRole('SCOPE_ADMIN')")  // ADD THIS
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")  // ADD THIS
     public ResponseEntity<MaterialFileResponse> uploadFile(
             @PathVariable Long id,
             @RequestParam("file") MultipartFile file,
@@ -498,7 +496,7 @@ public ResponseEntity<Map<String, Object>> debugAuth(Authentication authenticati
 
     // MODIFY THIS - Add authentication for viewing files
     @GetMapping("/{id}/files")
-    @PreAuthorize("hasRole('SCOPE_USER')")  // ADD THIS
+    @PreAuthorize("hasAuthority('SCOPE_USER')")  // ADD THIS
     public ResponseEntity<List<MaterialFileResponse>> getFilesByMaterial(
             @PathVariable Long id,
             Authentication authentication) {  // ADD Authentication parameter
@@ -511,7 +509,7 @@ public ResponseEntity<Map<String, Object>> debugAuth(Authentication authenticati
 
     // Keep download endpoints as they are, but consider adding authentication if needed
     @GetMapping("/files/{fileId}/download")
-    @PreAuthorize("hasRole('SCOPE_USER')")  // OPTIONALLY ADD THIS
+    @PreAuthorize("hasAuthority('SCOPE_USER')")  // OPTIONALLY ADD THIS
     public ResponseEntity<Resource> downloadFile(@PathVariable Long fileId) {
         try {
             FileDownloadResponse fileResponse = materialFileService.getFileForDownload(fileId);
@@ -531,7 +529,7 @@ public ResponseEntity<Map<String, Object>> debugAuth(Authentication authenticati
     }
 
     @GetMapping("/files/{fileId}/preview")
-    @PreAuthorize("hasRole('SCOPE_USER')")  // OPTIONALLY ADD THIS
+    @PreAuthorize("hasAuthority('SCOPE_USER')")  // OPTIONALLY ADD THIS
     public ResponseEntity<Resource> previewFile(@PathVariable Long fileId) {
         try {
             FileDownloadResponse fileResponse = materialFileService.getFileForDownload(fileId);

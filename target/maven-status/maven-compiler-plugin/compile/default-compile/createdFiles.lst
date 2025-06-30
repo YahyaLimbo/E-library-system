@@ -3,6 +3,7 @@ com\mycompany\treviska\security\RegistrationRequestDto.class
 com\mycompany\treviska\MaterialService.class
 com\mycompany\treviska\MaterialFileRepository.class
 com\mycompany\treviska\User.class
+com\mycompany\treviska\Config\CustomJwtAuthenticationConverter.class
 com\mycompany\treviska\FileDownloadResponse.class
 com\mycompany\treviska\Config\SecurityConfig.class
 com\mycompany\treviska\MaterialRepository.class

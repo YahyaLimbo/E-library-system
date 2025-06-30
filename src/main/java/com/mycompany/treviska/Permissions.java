@@ -16,7 +16,7 @@ public class Permissions {
     private static final Map<String, Set<String>> ROLE_PERMISSIONS = new HashMap<>();
 
     static {
-        // ADMIN permissions - full access
+        // ADMIN permissions - full access (matching your database role "admin")
         ROLE_PERMISSIONS.put("ROLE_ADMIN", Set.of(
             "CREATE_MATERIAL",
             "UPDATE_MATERIAL", 
@@ -29,18 +29,27 @@ public class Permissions {
             "MANAGE_USERS"
         ));
 
-        // LIBRARIAN permissions - manage materials but not delete
-        ROLE_PERMISSIONS.put("ROLE_LIBRARIAN", Set.of(
+        // USER permissions - basic access (matching your database role "user")
+        ROLE_PERMISSIONS.put("ROLE_USER", Set.of(
+            "VIEW_ALL_MATERIALS",
+            "SEARCH_MATERIALS",
+            "DOWNLOAD_FILES"
+        ));
+        
+        // SUPPORT BOTH CASES: Add lowercase versions too
+        ROLE_PERMISSIONS.put("ROLE_admin", Set.of(
             "CREATE_MATERIAL",
-            "UPDATE_MATERIAL",
-            "VIEW_STATS", 
+            "UPDATE_MATERIAL", 
+            "DELETE_MATERIAL",
+            "BULK_CREATE_MATERIAL",
+            "VIEW_STATS",
             "UPLOAD_FILES",
             "EXPORT_MATERIALS",
-            "VIEW_ALL_MATERIALS"
+            "VIEW_ALL_MATERIALS",
+            "MANAGE_USERS"
         ));
 
-        // USER permissions - basic access
-        ROLE_PERMISSIONS.put("ROLE_USER", Set.of(
+        ROLE_PERMISSIONS.put("ROLE_user", Set.of(
             "VIEW_ALL_MATERIALS",
             "SEARCH_MATERIALS",
             "DOWNLOAD_FILES"
@@ -57,15 +66,25 @@ public class Permissions {
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         
+        // DEBUG: Print what we're checking
+        System.out.println("=== PERMISSION CHECK DEBUG ===");
+        System.out.println("Checking permission: " + permission);
+        System.out.println("User authorities: " + authorities);
+        
         for (GrantedAuthority authority : authorities) {
             String role = authority.getAuthority();
+            System.out.println("Checking role: " + role);
+            
             Set<String> rolePermissions = ROLE_PERMISSIONS.get(role);
+            System.out.println("Role permissions: " + rolePermissions);
             
             if (rolePermissions != null && rolePermissions.contains(permission)) {
+                System.out.println("✅ Permission GRANTED for role: " + role);
                 return true;
             }
         }
         
+        System.out.println("❌ Permission DENIED");
         return false;
     }
 

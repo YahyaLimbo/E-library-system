@@ -14,6 +14,7 @@ import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
+import com.mycompany.treviska.Repository.UserRepository;
 
 import java.io.InputStream;
 import java.security.KeyFactory;
@@ -81,7 +82,7 @@ public class JwtConfig {
     }
 
     @Bean
-    public JwtService jwtService(JwtEncoder jwtEncoder) {
-        return new JwtService(appName, ttl, jwtEncoder);
+    public JwtService jwtService(JwtEncoder jwtEncoder,UserRepository userRepository) {
+        return new JwtService(appName, ttl, jwtEncoder,userRepository);
     }
 }

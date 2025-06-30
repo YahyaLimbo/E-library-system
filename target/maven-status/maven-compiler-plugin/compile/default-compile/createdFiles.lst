@@ -29,6 +29,7 @@ com\mycompany\treviska\MaterialFileService.class
 com\mycompany\treviska\Material$MaterialFormat.class
 com\mycompany\treviska\Material.class
 com\mycompany\treviska\MaterialSummary$MaterialSummaryBuilder.class
+com\mycompany\treviska\Service\JwtService$1.class
 com\mycompany\treviska\security\RegistrationResponseDto.class
 com\mycompany\treviska\Treviska.class
 com\mycompany\treviska\security\AuthenticationRequestDto.class

@@ -9,9 +9,11 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
         
 @Entity
-@Table(name = "materialFiles")
+@Table(name = "material_files")
 @Data
 @Builder
 @NoArgsConstructor
@@ -36,8 +38,8 @@ public class MaterialFile {
     @Column(name = "file_type")
     private String fileType; // MIME type like application/pdf
     
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
+    
+    @JdbcTypeCode(SqlTypes.VARBINARY)  // checked on postman, return 200 inclduing file opening
     @Column(name = "file_content")
     private byte[] fileContent;
     
@@ -61,7 +63,7 @@ public class MaterialFile {
     @JoinColumn(name = "material_id", insertable = false, updatable = false)
     private Material material;
     public MaterialFile(Long id, Long materialId, String name, Long fileSize, String fileType, 
-                   Integer downloadCount, Boolean isPrimary, LocalDateTime uploadedAt, LocalDateTime updatedAt) {
+                 Integer downloadCount, Boolean isPrimary, LocalDateTime uploadedAt, LocalDateTime updatedAt) {
     this.id = id;
     this.materialId = materialId;
     this.name = name;
@@ -71,6 +73,5 @@ public class MaterialFile {
     this.isPrimary = isPrimary;
     this.uploadedAt = uploadedAt;
     this.updatedAt = updatedAt;
-    // fileContent is null for performance
     }
 }

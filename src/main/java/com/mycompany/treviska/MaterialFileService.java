@@ -43,21 +43,24 @@ public class MaterialFileService {
         if (request != null && Boolean.TRUE.equals(request.getIsPrimary())) {
             unsetPrimaryFile(materialId);
         }
-        
+         byte[] fileBytes = file.getBytes();
+        if (fileBytes == null || fileBytes.length == 0) {
+        throw new ValidationException("File content cannot be empty");
+        }
         // Create file record with content
         MaterialFile materialFile = MaterialFile.builder()
                 .materialId(materialId)
                 .name(file.getOriginalFilename())
                 .fileSize(file.getSize())
                 .fileType(file.getContentType())
-                .fileContent(file.getBytes()) // Store file content in database
+                .fileContent(fileBytes) // Store file content in database
                 .isPrimary(request != null ? request.getIsPrimary() : false)
                 .downloadCount(0)
                 .build();
-        
+        System.out.println("About to save - fileContent length: " + 
+                      (materialFile.getFileContent() != null ? materialFile.getFileContent().length : "NULL"));
+    
         MaterialFile savedFile = materialFileRepository.save(materialFile);
-        log.info("File uploaded successfully for material {}: {}", materialId, file.getOriginalFilename());
-        
         return new MaterialFileResponse(savedFile);
     }
     
@@ -131,4 +134,6 @@ public class MaterialFileService {
                     });
                 });
     }
+    
+    
 }

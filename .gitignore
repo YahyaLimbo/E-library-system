@@ -1,1 +1,11 @@
 /target/
+*.log
+.env
+application-*.properties
+src/main/resources/keys/
+*.key
+*.pem*.p12
+application-local.properties
+application-prod.properties
+set-env.bat
+setup-env.ps1

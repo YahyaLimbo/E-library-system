@@ -12,7 +12,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="userid")
     private Long userid;
 
@@ -25,7 +25,7 @@ public class User {
     private String password;
     @Column(name = "role", nullable = false, length = 10)
     @Enumerated(EnumType.STRING)
-    private UserRole role = UserRole.user;  // Default to 'user'
+    private UserRole role = UserRole.user;  
     
     public enum UserRole {
         admin, user

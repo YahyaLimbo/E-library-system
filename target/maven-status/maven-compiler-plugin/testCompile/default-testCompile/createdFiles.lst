@@ -1,0 +1,10 @@
+UserTest.class
+com\mycompany\treviska\Service\UserServiceTest.class
+MaterialFileTest.class
+UserControllerTest.class
+MaterialTest.class
+MaterialRepositoryTest.class
+UserFIleWorkFlowTest.class
+SecurityIntegrationTest.class
+MaterialControllerTest.class
+UserMaterialWorkFlow.class

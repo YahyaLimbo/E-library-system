@@ -79,12 +79,12 @@ public class Permissions {
             System.out.println("Role permissions: " + rolePermissions);
             
             if (rolePermissions != null && rolePermissions.contains(permission)) {
-                System.out.println("✅ Permission GRANTED for role: " + role);
+                System.out.println("Permission GRANTED for role: " + role);
                 return true;
             }
         }
         
-        System.out.println("❌ Permission DENIED");
+        System.out.println("Permission DENIED");
         return false;
     }
 

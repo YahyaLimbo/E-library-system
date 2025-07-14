@@ -18,7 +18,6 @@ import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.GONE;
 
 @ExtendWith(MockitoExtension.class) //extend mockito framework to junit
-
 class UserServiceTest {
     @Mock
     

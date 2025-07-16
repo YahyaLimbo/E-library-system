@@ -1,5 +1,7 @@
 package com.mycompany.treviska;
 import com.mycompany.treviska.security.Permissions;
+import com.mycompany.treviska.LoanDto;
+import com.mycompany.treviska.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -22,7 +24,7 @@ import java.util.List;
 @CrossOrigin(origins = "*")  
 public class LoanController {
     private LoanRepository loanRepository;
-    private USerRepository userRepository;
+    private UserRepository userRepository;
     
     @PostMapping
     @PreAuthorize("hasAnyAuthority('SCOPE_USER', 'SCOPE_ADMIN')")

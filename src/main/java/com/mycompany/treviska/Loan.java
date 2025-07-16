@@ -11,10 +11,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 @Entity
-@Table("materials_loans")
+@Table(name="materials_loans")
 @Getter @Setter @NoArgsConstructor 
 @EntityListeners(AuditingEntityListener.class)
-public class Loan() {
+public class Loan{
  @Id
  @GeneratedValue(strategy = GenerationType.AUTO)
  @Column(name = "loanid")
@@ -40,11 +40,10 @@ public class Loan() {
  private LocalDateTime updated_at;
  @Column (name="notes")
  private String notes;
- 
- 
- 
-
-public enum LoanStatus{
+ public enum LoanStatus{
     active, returned, overdue;
+    //write manyyomany relationship user aadn materual
 }
-}
+} 
+ 
+ 

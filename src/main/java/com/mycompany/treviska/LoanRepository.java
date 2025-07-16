@@ -9,10 +9,10 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional
+import java.util.Optional;
 
 @Repository
-public interface Loanrepository extends JpaRepository<Loan, Long> {
+public interface LoanRepository extends JpaRepository<Loan, Long> {
     
     //find all the loans by userid page
     Page<Loan> findByUserId(Long userid, Pageable pageable);

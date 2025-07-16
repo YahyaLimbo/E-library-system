@@ -8,6 +8,7 @@ C:\Users\myahy\OneDrive\Attachments\Documenti\NetBeansProjects\Treviska\src\main
 C:\Users\myahy\OneDrive\Attachments\Documenti\NetBeansProjects\Treviska\src\main\java\com\mycompany\treviska\Treviska.java
 C:\Users\myahy\OneDrive\Attachments\Documenti\NetBeansProjects\Treviska\src\main\java\com\mycompany\treviska\CustomJwtAuthenticationConverter.java
 C:\Users\myahy\OneDrive\Attachments\Documenti\NetBeansProjects\Treviska\src\main\java\com\mycompany\treviska\security\UserProfileDto.java
+C:\Users\myahy\OneDrive\Attachments\Documenti\NetBeansProjects\Treviska\src\main\java\com\mycompany\treviska\LoanController.java
 C:\Users\myahy\OneDrive\Attachments\Documenti\NetBeansProjects\Treviska\src\main\java\com\mycompany\treviska\security\UserMapper.java
 C:\Users\myahy\OneDrive\Attachments\Documenti\NetBeansProjects\Treviska\src\main\java\com\mycompany\treviska\Config\SecurityConfig.java
 C:\Users\myahy\OneDrive\Attachments\Documenti\NetBeansProjects\Treviska\src\main\java\com\mycompany\treviska\MaterialFileResponse.java
@@ -26,14 +27,18 @@ C:\Users\myahy\OneDrive\Attachments\Documenti\NetBeansProjects\Treviska\src\main
 C:\Users\myahy\OneDrive\Attachments\Documenti\NetBeansProjects\Treviska\src\main\java\com\mycompany\treviska\MaterialFileService.java
 C:\Users\myahy\OneDrive\Attachments\Documenti\NetBeansProjects\Treviska\src\main\java\com\mycompany\treviska\User.java
 C:\Users\myahy\OneDrive\Attachments\Documenti\NetBeansProjects\Treviska\src\main\java\com\mycompany\treviska\Permissions.java
+C:\Users\myahy\OneDrive\Attachments\Documenti\NetBeansProjects\Treviska\src\main\java\com\mycompany\treviska\LoanDto.java
 C:\Users\myahy\OneDrive\Attachments\Documenti\NetBeansProjects\Treviska\src\main\java\com\mycompany\treviska\Service\JwtService.java
+C:\Users\myahy\OneDrive\Attachments\Documenti\NetBeansProjects\Treviska\src\main\java\com\mycompany\treviska\Loan.java
 C:\Users\myahy\OneDrive\Attachments\Documenti\NetBeansProjects\Treviska\src\main\java\com\mycompany\treviska\security\AuthenticationResponseDto.java
 C:\Users\myahy\OneDrive\Attachments\Documenti\NetBeansProjects\Treviska\src\main\java\com\mycompany\treviska\Service\JpaUserDetailsService.java
 C:\Users\myahy\OneDrive\Attachments\Documenti\NetBeansProjects\Treviska\src\main\java\com\mycompany\treviska\security\RegistrationRequestDto.java
 C:\Users\myahy\OneDrive\Attachments\Documenti\NetBeansProjects\Treviska\src\main\java\com\mycompany\treviska\FileUploadRequest.java
+C:\Users\myahy\OneDrive\Attachments\Documenti\NetBeansProjects\Treviska\src\main\java\com\mycompany\treviska\LoanService.java
 C:\Users\myahy\OneDrive\Attachments\Documenti\NetBeansProjects\Treviska\src\main\java\com\mycompany\treviska\TestFileEntity.java
 C:\Users\myahy\OneDrive\Attachments\Documenti\NetBeansProjects\Treviska\src\main\java\com\mycompany\treviska\MethodSecurityConfig.java
 C:\Users\myahy\OneDrive\Attachments\Documenti\NetBeansProjects\Treviska\src\main\java\com\mycompany\treviska\Service\UserService.java
+C:\Users\myahy\OneDrive\Attachments\Documenti\NetBeansProjects\Treviska\src\main\java\com\mycompany\treviska\LoanRepository.java
 C:\Users\myahy\OneDrive\Attachments\Documenti\NetBeansProjects\Treviska\src\main\java\com\mycompany\treviska\security\RegistrationMapper.java
 C:\Users\myahy\OneDrive\Attachments\Documenti\NetBeansProjects\Treviska\src\main\java\com\mycompany\treviska\MaterialRepository.java
 C:\Users\myahy\OneDrive\Attachments\Documenti\NetBeansProjects\Treviska\src\main\java\com\mycompany\treviska\Controller\RegisterController.java

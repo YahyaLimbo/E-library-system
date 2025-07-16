@@ -1,4 +1,5 @@
 package com.mycompany.treviska;
+import com.mycompany.treviska.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -23,7 +24,7 @@ public class LoanService {
     private static final int MaximumLoanDays =7;
     private static final int MaximumLoanNumber = 3;
     
-    public LoanDTo.LoanResponse createLoan(Long userId,LoanDto.CreateLoanRequest request){
+    public LoanDto.LoanResponse createLoan(Long userId,LoanDto.CreateLoanRequest request){
         User user =UserRepository.findbyId(userId);
         Material material =MaterialRepository.findbyId();   
         Long activeLoans= loanRepository.countActiveLoansUser(userid);
@@ -44,7 +45,7 @@ public class LoanService {
     return new LoanDto.LoanResponse(loanSaved,user, material);
     }
     
-   public LoanDto.LoanResponse ReturnLoan(Long loanid, LoandDto.ReturnLoanRequest request){
+   public LoanDto.LoanResponse ReturnLoan(Long loanid, LoanDto.ReturnLoanRequest request){
        Loan loan =LoanRepository.findByLoan(loanid)
                .orElseThrow(() -> new ValidationException("Loan not found"));
        
@@ -54,7 +55,7 @@ public class LoanService {
        User user = userRepository.findById(loan.getUserId()).orElse(null);
        Material material = materialRepository.findById(loan.getMaterialId()).orElse(null);
         
-       return new LoanDTOs.LoanResponse(updatedLoan, user, material);
+       return new LoanDto.LoanResponse(updatedLoan, user, material);
    }
    //remember to fetch through obj
    @Transactional(readOnly= true)
@@ -68,7 +69,7 @@ public class LoanService {
 }
    //get users who has active loans
    @Transactional(readOnly=true)
-   public List<LoadDto.LoanResponse> GetActiveLoansList(Long userid){
+   public List<LoanDto.LoanResponse> GetActiveLoansList(Long userid){
        List<Loan> loans= LoanRepository.findActiveLoanUsers(userid);
        
        return loans.stream()
@@ -79,7 +80,7 @@ public class LoanService {
                 .collect(Collectors.toList());
    }
     @Transactional(readOnly=true)
-    public LoanDto.LoanResponse UpdateLoanStatus(Long loanid, Loan.Status newStatus, String notes){
+    public LoanDto.LoanResponse UpdateLoanStatus(Long loanid, Loan.LoanStatus newStatus, String notes){
         Loan loan = loanRepository.findById(loanid)
                 .orElseThrow(()->new ValidationException("id not found"));
         loan.setStatut(newStatus);
@@ -88,7 +89,7 @@ public class LoanService {
         User user = userRepository.findById(loan.getUserId()).orElse(null);
         Material material = materialRepository.findById(loan.getMaterialId()).orElse(null);
         
-        return new LoanDTO.LoanResponse(Updatedloan, user, material);
+        return new LoanDto.LoanResponse(Updatedloan, user, material);
     }
    
 }

@@ -181,9 +181,6 @@ public class Tags {
         };
     }
     
-    /**
-     * Add a tag manually
-     */
     public void addTag(String tag) {
         if (tags == null) {
             tags = new ArrayList<>();

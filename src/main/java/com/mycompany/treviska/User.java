@@ -30,4 +30,12 @@ public class User {
     public enum UserRole {
         admin, user
     }
+     public Long getUserId() {
+        return this.userid;
+    }
+    
+    public void setUserId(Long userId) {
+        this.userid = userId;
+    }
 }
+   

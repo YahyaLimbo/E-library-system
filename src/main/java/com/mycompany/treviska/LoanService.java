@@ -1,4 +1,5 @@
 package com.mycompany.treviska;
+
 import com.mycompany.treviska.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,19 +22,32 @@ public class LoanService {
     private final UserRepository userRepository;
     private final MaterialRepository materialRepository;
     
-    private static final int MaximumLoanDays =7;
-    private static final int MaximumLoanNumber = 3;
+    private static final int DEFAULT_LOAN_DURATION_DAYS = 14;
+    private static final int MAXIMUM_LOAN_NUMBER = 3;
     
-    public LoanDto.LoanResponse createLoan(Long userId,LoanDto.CreateLoanRequest request){
-        User user =UserRepository.findbyId(userId);
-        Material material =MaterialRepository.findbyId();   
-        Long activeLoans= loanRepository.countActiveLoansUser(userid);
-        if(activeLoans>MaximumLoanNumber){
-        throw new ValidationException("Number of loans exceeded");
-        }
-        //Loan entity
-    Loan loan = loan.builder()
-            .userId(userId)
+    public LoanResponse createLoan(Long userId, CreateLoanRequest request) {
+        // Validate user exists
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ValidationException("User not found"));
+        
+        // Validate material exists
+        Material material = materialRepository.findById(request.getMaterialId())
+                .orElseThrow(() -> new ValidationException("Material not found"));
+        
+        // Check if user has reached maximum loans
+       // Long activeLoans = loanRepository.countActiveLoansForUser(userId);
+        //if (activeLoans >= MAXIMUM_LOAN_NUMBER) {
+         //   throw new ValidationException("Maximum number of active loans exceeded");
+       // }
+        
+        // Check if material is already on loan
+        //if (loanRepository.isMaterialCurrentlyLoaned(request.getMaterialId())) {
+          //  throw new ValidationException("Material is currently on loan");
+        //}
+        
+        // Create loan entity using manual builder
+        Loan loan = Loan.builder()
+                .userId(userId)
                 .materialId(request.getMaterialId())
                 .borrowDate(LocalDate.now())
                 .dueDate(request.getDueDate() != null ? request.getDueDate() : 
@@ -41,56 +55,126 @@ public class LoanService {
                 .status(Loan.LoanStatus.ACTIVE)
                 .notes(request.getNotes())
                 .build();
-    Loan loanSaved = loanRepository.save(loan);
-    return new LoanDto.LoanResponse(loanSaved,user, material);
+        
+        Loan savedLoan = loanRepository.save(loan);
+        log.info("Loan created successfully: {}", savedLoan.getLoanId());
+        
+        return new LoanResponse(savedLoan, user, material);
     }
     
-   public LoanDto.LoanResponse ReturnLoan(Long loanid, LoanDto.ReturnLoanRequest request){
-       Loan loan =LoanRepository.findByLoan(loanid)
-               .orElseThrow(() -> new ValidationException("Loan not found"));
-       
-       Loan.setReturnDate(LocalDateTime.now());
-       Loan.setStatus(Status.RETURNED);
-       Loan updatedLoan = loanRepository.save(loan);
-       User user = userRepository.findById(loan.getUserId()).orElse(null);
-       Material material = materialRepository.findById(loan.getMaterialId()).orElse(null);
+    public LoanResponse returnLoan(Long loanId, ReturnLoanRequest request) {
+        Loan loan = loanRepository.findById(loanId)
+                .orElseThrow(() -> new ValidationException("Loan not found"));
         
-       return new LoanDto.LoanResponse(updatedLoan, user, material);
-   }
-   //remember to fetch through obj
-   @Transactional(readOnly= true)
-   public LoanResponse FindByLoanId(Long loanId){
-       Loan loan = loanReposiroty.findById(loanId)
-               .orElseThrow(()->new ValidationException("Loan not found"));
-       User user = userRepository.findById(loan.getUserId()).orElse(null);
-        Material material = materialRepository.findById(loan.getMaterialId()).orElse(null);
+        if (loan.getStatus() != Loan.LoanStatus.ACTIVE) {
+            throw new ValidationException("Loan is not active");
+        }
         
-        return new LoanResponse(loan, user, material);
-}
-   //get users who has active loans
-   @Transactional(readOnly=true)
-   public List<LoanDto.LoanResponse> GetActiveLoansList(Long userid){
-       List<Loan> loans= LoanRepository.findActiveLoanUsers(userid);
-       
-       return loans.stream()
-                .map(loan -> {
-                    Material material = materialRepository.findById(loan.getMaterialId()).orElse(null);
-                    return new LoanDto.LoanResponse(loan, null, material);
-                })
-                .collect(Collectors.toList());
-   }
-    @Transactional(readOnly=true)
-    public LoanDto.LoanResponse UpdateLoanStatus(Long loanid, Loan.LoanStatus newStatus, String notes){
-        Loan loan = loanRepository.findById(loanid)
-                .orElseThrow(()->new ValidationException("id not found"));
-        loan.setStatut(newStatus);
+        // Set return date and status
+        loan.setReturnDate(request != null && request.getActualReturnDate() != null ? 
+                          request.getActualReturnDate() : LocalDate.now());
+        loan.setStatus(Loan.LoanStatus.RETURNED);
         
-        Loan Updatedloan = loanRepository.save(loan);
+        if (request != null && request.getNotes() != null) {
+            loan.setNotes(request.getNotes());
+        }
+        
+        Loan updatedLoan = loanRepository.save(loan);
+        log.info("Loan returned successfully: {}", loanId);
+        
+        // Load related entities for response
         User user = userRepository.findById(loan.getUserId()).orElse(null);
         Material material = materialRepository.findById(loan.getMaterialId()).orElse(null);
         
-        return new LoanDto.LoanResponse(Updatedloan, user, material);
+        return new LoanResponse(updatedLoan, user, material);
     }
-   
+    
+    @Transactional(readOnly = true)
+    public LoanResponse getLoanById(Long loanId) {
+        Loan loan = loanRepository.findById(loanId)
+                .orElseThrow(() -> new ValidationException("Loan not found"));
+        
+        User user = userRepository.findById(loan.getUserId()).orElse(null);
+        Material material = materialRepository.findById(loan.getMaterialId()).orElse(null);
+        
+        return new LoanResponse(loan, user, material);
+    }
+    
+   // @Transactional(readOnly = true)
+  //  public List<LoanResponse> getActiveLoansForUser(Long userId) {
+     //   List<Loan> loans = loanRepository.findActiveLoansForUser(userId);
+        
+       // return loans.stream()
+         //       .map(loan -> {
+           //         Material material = materialRepository.findById(loan.getMaterialId()).orElse(null);
+             //       return new LoanResponse(loan, null, material);
+               // })
+          //      .collect(Collectors.toList());
+   // }
+    
+    //@Transactional(readOnly = true)
+  //  public Page<LoanResponse> getLoanHistoryForUser(Long userId, Pageable pageable) {
+//        Page<Loan> loanPage = loanRepository.findLoanHistoryForUser(userId, pageable);
+        
+      //  return loanPage.map(loan -> {
+          //  Material material = materialRepository.findById(loan.getMaterialId()).orElse(null);
+        //    return new LoanResponse(loan, null, material);
+        //});
+   // }
+    
+    //public LoanResponse renewLoan(Long loanId, int additionalDays) {
+      //  Loan loan = loanRepository.findById(loanId)
+        //        .orElseThrow(() -> new ValidationException("Loan not found"));
+        
+        //if (loan.getStatus() != Loan.LoanStatus.ACTIVE) {
+          //  throw new ValidationException("Can only renew active loans");
+        //}
+        
+        // Check if loan is already overdue
+//        if (loan.isOverdue()) {
+  //          throw new ValidationException("Cannot renew overdue loan");
+    //    }
+        
+        // Extend due date
+     //   loan.setDueDate(loan.getDueDate().plusDays(additionalDays));
+        
+       // Loan updatedLoan = loanRepository.save(loan);
+       // log.info("Loan renewed successfully: {} for {} days", loanId, additionalDays);
+        
+       // User user = userRepository.findById(loan.getUserId()).orElse(null);
+        //Material material = materialRepository.findById(loan.getMaterialId()).orElse(null);
+      //  
+     // //  return new LoanResponse(updatedLoan, user, material);
+   // }
+    
+  //  @Transactional(readOnly = true)
+//    public List<LoanResponse> getOverdueLoans() {
+    //    List<Loan> loans = loanRepository.findOverdueLoans();
+        
+      //  return loans.stream()
+        //        .map(loan -> {
+          //          User user = userRepository.findById(loan.getUserId()).orElse(null);
+            ///        Material material = materialRepository.findById(loan.getMaterialId()).orElse(null);
+               //     return new LoanResponse(loan, user, material);
+               // })
+               // .collect(Collectors.toList());
+   // }
+    
+    public LoanResponse updateLoanStatus(Long loanId, Loan.LoanStatus newStatus, String notes) {
+        Loan loan = loanRepository.findById(loanId)
+                .orElseThrow(() -> new ValidationException("Loan not found"));
+        
+        loan.setStatus(newStatus);
+        if (notes != null) {
+            loan.setNotes(notes);
+        }
+        
+        Loan updatedLoan = loanRepository.save(loan);
+        log.info("Loan status updated: {} to {}", loanId, newStatus);
+        
+        User user = userRepository.findById(loan.getUserId()).orElse(null);
+        Material material = materialRepository.findById(loan.getMaterialId()).orElse(null);
+        
+        return new LoanResponse(updatedLoan, user, material);
+    }
 }
-

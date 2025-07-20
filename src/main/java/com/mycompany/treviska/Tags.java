@@ -18,7 +18,9 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.Arrays;
 import java.util.stream.Collectors;
-@Entity(name="MATERIALTAGS")
+
+@Entity
+@Table(name="MATERIALTAGS")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 @EntityListeners(AuditingEntityListener.class)
 public class Tags {
@@ -39,25 +41,24 @@ public class Tags {
     @Builder.Default
     private List<String> tags = new ArrayList<>();
     
-    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MATERIALID", insertable = false, updatable = false)
     private Material material;
     
-    
     public enum BookTag {
-    FICTION("fiction"), ADVENTURE("adventure"), ACTION("action"), 
-    HORROR("horror"), ROMANCE("romance"), WESTERN("western"), 
-    COMEDY("comedy"), SCIENCE_FICTION("science-fiction"), 
-    MYSTERY("mystery"), DARK_FANTASY("dark-fantasy"), 
-    FANTASY("fantasy"), THRILLER("thriller"), 
-    ROMANTIC_COMEDY("romantic-comedy"), DRAMA("drama");
-    
-     private final String value;
+        FICTION("fiction"), ADVENTURE("adventure"), ACTION("action"), 
+        HORROR("horror"), ROMANCE("romance"), WESTERN("western"), 
+        COMEDY("comedy"), SCIENCE_FICTION("science-fiction"), 
+        MYSTERY("mystery"), DARK_FANTASY("dark-fantasy"), 
+        FANTASY("fantasy"), THRILLER("thriller"), 
+        ROMANTIC_COMEDY("romantic-comedy"), DRAMA("drama");
+        
+        private final String value;
         BookTag(String value) { this.value = value; }
         public String getValue() { return value; }
     }
-     public enum JournalTag {
+    
+    public enum JournalTag {
         PEER_REVIEWED("peer-reviewed"), OPEN_ACCESS("open-access"),
         RESEARCH_ARTICLE("research-article"), REVIEW_ARTICLE("review-article"),
         CASE_STUDY("case-study"), META_ANALYSIS("meta-analysis"),
@@ -67,8 +68,18 @@ public class Tags {
         JournalTag(String value) { this.value = value; }
         public String getValue() { return value; }
     }
+    
+    public enum MagazineTag {
+        WEEKLY("weekly"), MONTHLY("monthly"), QUARTERLY("quarterly"),
+        SPECIAL_ISSUE("special-issue"), LIFESTYLE("lifestyle"),
+        TECHNOLOGY("technology"), FASHION("fashion"), HEALTH("health");
+        
+        private final String value;
+        MagazineTag(String value) { this.value = value; }
+        public String getValue() { return value; }
+    }
      
-     public enum NewspaperTag {
+    public enum NewspaperTag {
         FRONT_PAGE("front-page"), LOCAL_NEWS("local-news"), 
         NATIONAL_NEWS("national-news"), INTERNATIONAL("international"),
         POLITICS("politics"), BUSINESS("business"), SPORTS("sports"),
@@ -80,7 +91,8 @@ public class Tags {
         NewspaperTag(String value) { this.value = value; }
         public String getValue() { return value; }
     }
-     public enum ResearchPaperTag {
+    
+    public enum ResearchPaperTag {
         CONFERENCE_PAPER("conference-paper"), THESIS("thesis"),
         DISSERTATION("dissertation"), TECHNICAL_REPORT("technical-report"),
         WHITE_PAPER("white-paper"), WORKING_PAPER("working-paper"),
@@ -90,7 +102,8 @@ public class Tags {
         ResearchPaperTag(String value) { this.value = value; }
         public String getValue() { return value; }
     }
-      public enum ReferenceMaterialTag {
+    
+    public enum ReferenceMaterialTag {
         DICTIONARY("dictionary"), ENCYCLOPEDIA("encyclopedia"),
         ATLAS("atlas"), HANDBOOK("handbook"), DIRECTORY("directory"),
         MANUAL("manual"), SPECIFICATIONS("specifications");
@@ -139,7 +152,8 @@ public class Tags {
         AudioBookTag(String value) { this.value = value; }
         public String getValue() { return value; }
     }
-      public static Set<String> getPredefinedTagsForType(String materialType) {
+    
+    public static Set<String> getPredefinedTagsForType(String materialType) {
         return switch (materialType.toLowerCase()) {
             case "book" -> Arrays.stream(BookTag.values())
                     .map(BookTag::getValue)
@@ -181,6 +195,14 @@ public class Tags {
         };
     }
     
+    // Helper method to normalize tags
+    private String normalizeTag(String tag) {
+        if (tag == null || tag.trim().isEmpty()) {
+            return "";
+        }
+        return tag.trim().toLowerCase();
+    }
+    
     public void addTag(String tag) {
         if (tags == null) {
             tags = new ArrayList<>();
@@ -188,31 +210,46 @@ public class Tags {
         String normalizedTag = normalizeTag(tag);
         if (!normalizedTag.isEmpty() && !tags.contains(normalizedTag)) {
             tags.add(normalizedTag);
-            updateTagCount();
         }
     }
     
-    /**
-     * Remove a tag manually
-     */
     public void removeTag(String tag) {
         if (tags != null) {
             String normalizedTag = normalizeTag(tag);
             tags.remove(normalizedTag);
-            updateTagCount();
         }
     }
-      public MaterialTags(Long materialId, String type) {
+    
+    public void clearTags() {
+        if (tags == null) {
+            tags = new ArrayList<>();
+        } else {
+            tags.clear();
+        }
+    }
+    
+    public void setTagsFromStrings(List<String> tagList) {
+        clearTags();
+        if (tagList != null && !tagList.isEmpty()) {
+            for (String tag : tagList) {
+                addTag(tag);
+            }
+        }
+    }
+    
+    public int getTagCount() {
+        return tags != null ? tags.size() : 0;
+    }
+    
+    // Custom constructors
+    public Tags(Long materialId, String type) {
         this.materialId = materialId;
         this.type = type.toLowerCase();
         this.tags = new ArrayList<>();
-        this.tagCount = 0;
-        this.isActive = true;
     }
     
-    public MaterialTags(Long materialId, String type, List<String> tags) {
+    public Tags(Long materialId, String type, List<String> tags) {
         this(materialId, type);
-        setTags(tags);
+        setTagsFromStrings(tags);
     }
-        
 }

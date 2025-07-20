@@ -1,12 +1,7 @@
 package com.mycompany.treviska;
-import com.mycompany.treviska.security.Permissions;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -21,93 +16,112 @@ import java.util.List;
 @Slf4j
 @RequestMapping("api/materials/{materialId}/tags")
 public class MaterialTagController {
+    
     private final MaterialTagService materialTagService;
     
-    public static class TagResponse{
+    public static class TagRequest {
         public List<String> tags;
+        
+        public TagRequest() {}
+        
         public TagRequest(List<String> tags) {
             this.tags = tags;
-    }
-}
-    @PostMapping
-    @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN')")
-    public ResponseEntity<Tags> createTags(@PathVariable Long materialId, @Valid @RequestBody TagRequest request, Authentication authentication){
-        try {
-            Tags tags = MaterialTagService.createTags(materialId, request.tags);
-            return ResponseEntity.ok(tags);
-        }catch(validationException e){
-            return ResponseEntity.badRequest.build();
-        
         }
-}
+    }
+    
+    public static class TagResponse {
+        public List<String> tags;
+        
+        public TagResponse() {}
+        
+        public TagResponse(List<String> tags) {
+            this.tags = tags;
+        }
+    }
+    
     @PostMapping
     @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN')")
-    public ResponseEntity<Tags> addTags(@PathVariable Long materialId, @Valid @RequestBody TagRequest request,
-            Authentication authentication){
-        try{
-     Tags tags = materialTagService.addTags(materialId, request.tags);
-            return ResponseEntity.ok(tags);
+    public ResponseEntity<TagResponse> createTags(@PathVariable Long materialId, 
+            @Valid @RequestBody TagRequest request, 
+            Authentication authentication) {
+        try {
+            Tags tags = materialTagService.createTags(materialId, request.tags);
+            return ResponseEntity.ok(new TagResponse(tags.getTags()));
         } catch (ValidationException e) {
             return ResponseEntity.badRequest().build();
         }
-        
     }
-    @PostMapping("/remove")
+    
+    @PostMapping("/add")
     @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN')")
-    public ResponseEntity<Tags> removeTags(@PathVariable Long materialId, @Valid @RequestBody TagRequest request,
-            Authentication authentication){
-        try{
-        Tags tags = MaterialTagService.removeTags(materialId, request.tags);
-        return ResponseEntity.ok(tags);
-        }catch (ValidationException e){
+    public ResponseEntity<TagResponse> addTags(@PathVariable Long materialId, 
+            @Valid @RequestBody TagRequest request,
+            Authentication authentication) {
+        try {
+            Tags tags = materialTagService.addTags(materialId, request.tags);
+            return ResponseEntity.ok(new TagResponse(tags.getTags()));
+        } catch (ValidationException e) {
             return ResponseEntity.badRequest().build();
         }
     }
-    @PostMapping("/search")
+    
+    @PostMapping("/remove")
+    @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN')")
+    public ResponseEntity<TagResponse> removeTags(@PathVariable Long materialId, 
+            @Valid @RequestBody TagRequest request,
+            Authentication authentication) {
+        try {
+            Tags tags = materialTagService.removeTags(materialId, request.tags);
+            return ResponseEntity.ok(new TagResponse(tags.getTags()));
+        } catch (ValidationException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+    
+    @GetMapping("/search/{tag}")
     @PreAuthorize("hasAnyAuthority('SCOPE_USER','SCOPE_ADMIN')")
-    public ResponseEntity<Tags> findMaterialByTags(@PathVariable String tag ){
-        try{
-            List<Tags>materials = MaterialTagService.findMaterialByTags(tag);
+    public ResponseEntity<List<Tags>> findMaterialByTags(@PathVariable String tag) {
+        try {
+            List<Tags> materials = materialTagService.findMaterialsByTag(tag);
             return ResponseEntity.ok(materials);
-        }catch(Exception e){
-             return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }   
     }
-    @PostMapping("/unique")
+    
+    @GetMapping("/unique")
     @PreAuthorize("hasAnyAuthority('SCOPE_USER','SCOPE_ADMIN')")
-    //getTypebytags
-    public ResponseEntity<Tags> getTagsByType(@PathVariable String tag ){
+    public ResponseEntity<List<String>> getAllUniqueTags() {
         try {
-            List<String> uniqueTags = tagsService.getAllUniqueTags();
+            List<String> uniqueTags = materialTagService.getAllUniqueTags();
             return ResponseEntity.ok(uniqueTags);
         } catch (Exception e) {
             log.warn("Failed to get unique tags: {}", e.getMessage());
             return ResponseEntity.badRequest().build();
         }
     }
-    @PostMapping("/count")
+    
+    @GetMapping("/count/{tag}")
     @PreAuthorize("hasAnyAuthority('SCOPE_USER','SCOPE_ADMIN')")
-    public ResponseEntity<Tags> countTags(@PathVariable String tag){
-        try{
-        Long count = MaterialTagService.countTags(tag);
-        return ResponseEntity.ok(count);
-        }catch(Exception e){
+    public ResponseEntity<Long> countTags(@PathVariable String tag) {
+        try {
+            Long count = materialTagService.countTags(tag);
+            return ResponseEntity.ok(count);
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
-    @PostMapping("/update")
+    
+    @PutMapping
     @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN')")
-     public ResponseEntity<Tags> updateTags(@PathVariable Long materialId,
+    public ResponseEntity<TagResponse> updateTags(@PathVariable Long materialId,
             @Valid @RequestBody TagRequest request,
-            Authentication authentication){
-         try{
-         Tags tags = materialTagRepository.updateTags(materialId, request.tags);
-         return ResponseEntity.ok(tags);
-         }
-         catch (ValidationException e){
-         return ResponseEntity.badRequest().build();
-         }
+            Authentication authentication) {
+        try {
+            Tags tags = materialTagService.updateTags(materialId, request.tags);
+            return ResponseEntity.ok(new TagResponse(tags.getTags()));
+        } catch (ValidationException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
-    
-    
 }

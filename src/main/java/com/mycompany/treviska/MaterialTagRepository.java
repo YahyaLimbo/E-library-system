@@ -23,8 +23,11 @@ public interface  MaterialTagRepository extends JpaRepository<Tags, Long>{
     @Query(value = "UPDATE materialtags SET tags = ?2::jsonb WHERE materialid = ?1", nativeQuery = true)     
     Long updateByMaterialId(Long materialId, String tagsJson);
     
-   @Query(value = "SELECT * FROM materialtags WHERE tags::text ILIKE CONCAT('%\"', ?1, '\"%')", nativeQuery = true)
-    List<Tags> findByTags(String Tag);
+    @Query(value = "SELECT * FROM materialtags WHERE EXISTS (" +
+           "SELECT 1 FROM jsonb_array_elements_text(tags) AS tag_element " +
+           "WHERE LOWER(tag_element) = LOWER(?1)" +
+           ")", nativeQuery = true)
+    List<Tags> findByTags(String tag);
     
      // Count using the same safe approach
    @Query(value = "SELECT COUNT(DISTINCT t.materialtagid) FROM materialtags t, jsonb_array_elements_text(t.tags) AS tag_element WHERE tag_element = ?1", nativeQuery = true)

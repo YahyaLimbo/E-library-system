@@ -58,6 +58,7 @@ com\mycompany\treviska\Tags$BookTag.class
 com\mycompany\treviska\MaterialTagRepository.class
 com\mycompany\treviska\TestFileEntity$TestFileEntityBuilder.class
 com\mycompany\treviska\Tags$ResearchPaperTag.class
+com\mycompany\treviska\TagsResponseDto.class
 com\mycompany\treviska\Service\UserRegistrationService.class
 com\mycompany\treviska\Tags$ReferenceMaterialTag.class
 com\mycompany\treviska\Service\JwtService.class
@@ -75,6 +76,7 @@ com\mycompany\treviska\TestFileEntity.class
 com\mycompany\treviska\MaterialTagController$TagRequest.class
 com\mycompany\treviska\Tags$ArchiveTag.class
 com\mycompany\treviska\Config\JwtConfig.class
+com\mycompany\treviska\TagsResponseDto$TagsResponseDtoBuilder.class
 com\mycompany\treviska\LoanController.class
 com\mycompany\treviska\LoanResponse$LoanResponseBuilder.class
 com\mycompany\treviska\Tags$NewspaperTag.class

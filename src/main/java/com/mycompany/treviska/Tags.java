@@ -45,6 +45,19 @@ public class Tags {
     @JoinColumn(name = "MATERIALID", insertable = false, updatable = false)
     private Material material;
     
+    // IMPROVED: Override the getter to ensure null safety
+    public List<String> getTags() {
+        if (this.tags == null) {
+            this.tags = new ArrayList<>();
+        }
+        return this.tags;
+    }
+    
+    // IMPROVED: Override the setter to ensure null safety
+    public void setTags(List<String> tags) {
+        this.tags = (tags != null) ? tags : new ArrayList<>();
+    }
+    
     public enum BookTag {
         FICTION("fiction"), ADVENTURE("adventure"), ACTION("action"), 
         HORROR("horror"), ROMANCE("romance"), WESTERN("western"), 
@@ -204,27 +217,28 @@ public class Tags {
     }
     
     public void addTag(String tag) {
-        if (tags == null) {
-            tags = new ArrayList<>();
+        // Ensure tags list is never null
+        if (this.tags == null) {
+            this.tags = new ArrayList<>();
         }
         String normalizedTag = normalizeTag(tag);
-        if (!normalizedTag.isEmpty() && !tags.contains(normalizedTag)) {
-            tags.add(normalizedTag);
+        if (!normalizedTag.isEmpty() && !this.tags.contains(normalizedTag)) {
+            this.tags.add(normalizedTag);
         }
     }
     
     public void removeTag(String tag) {
-        if (tags != null) {
+        if (this.tags != null) {
             String normalizedTag = normalizeTag(tag);
-            tags.remove(normalizedTag);
+            this.tags.remove(normalizedTag);
         }
     }
     
     public void clearTags() {
-        if (tags == null) {
-            tags = new ArrayList<>();
+        if (this.tags == null) {
+            this.tags = new ArrayList<>();
         } else {
-            tags.clear();
+            this.tags.clear();
         }
     }
     
@@ -238,7 +252,7 @@ public class Tags {
     }
     
     public int getTagCount() {
-        return tags != null ? tags.size() : 0;
+        return (this.tags != null) ? this.tags.size() : 0;
     }
     
     // Custom constructors

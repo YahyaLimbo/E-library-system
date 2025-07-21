@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,15 +15,20 @@ import java.util.Optional;
 @Repository
 public interface  MaterialTagRepository extends JpaRepository<Tags, Long>{
     Optional<Tags> findByMaterialId(Long materialId);
-    List<Tags> findByType(Long materialId);
-    List<Tags> deleteByMaterialId(Long materialId);
-    List<Tags> updateByMatrialid(Long materialId);
+    List<Tags> findByType(String tags);
+    void deleteByMaterialId(Long materialId);
     
-    @Query("SELECT t FROM Tags t WHERE JSON_EXTRACT(t.tags, '$') LIKE %:tag%")
-    List<Tags> findByTags(@Param("tag")String Tag);
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE materialtags SET tags = ?2::jsonb WHERE materialid = ?1", nativeQuery = true)     
+    Long updateByMaterialId(Long materialId, String tagsJson);
     
-    @Query("SELECT COUNT(t) FROM Tags t WHERE JSON_EXTRACT(t.tags,'$') LIKE %:tag%")
-    List<Tags> countByTags(@Param("tag")String Tag);
+   @Query(value = "SELECT * FROM materialtags WHERE tags::text ILIKE CONCAT('%\"', ?1, '\"%')", nativeQuery = true)
+    List<Tags> findByTags(String Tag);
+    
+     // Count using the same safe approach
+   @Query(value = "SELECT COUNT(DISTINCT t.materialtagid) FROM materialtags t, jsonb_array_elements_text(t.tags) AS tag_element WHERE tag_element = ?1", nativeQuery = true)
+    Long countByTags(String Tag);
     
     
 }

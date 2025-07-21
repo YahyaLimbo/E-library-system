@@ -14,7 +14,6 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("api/materials/{materialId}/tags")
 public class MaterialTagController {
     
     private final MaterialTagService materialTagService;
@@ -39,7 +38,7 @@ public class MaterialTagController {
         }
     }
     
-    @PostMapping
+    @PostMapping("/api/materials/{materialId}/tags")
     @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN')")
     public ResponseEntity<TagResponse> createTags(@PathVariable Long materialId, 
             @Valid @RequestBody TagRequest request, 
@@ -52,7 +51,7 @@ public class MaterialTagController {
         }
     }
     
-    @PostMapping("/add")
+    @PostMapping("/api/materials/{materialId}/tags/add")
     @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN')")
     public ResponseEntity<TagResponse> addTags(@PathVariable Long materialId, 
             @Valid @RequestBody TagRequest request,
@@ -65,7 +64,7 @@ public class MaterialTagController {
         }
     }
     
-    @PostMapping("/remove")
+    @PostMapping("/api/materials/{materialId}/tags/remove")
     @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN')")
     public ResponseEntity<TagResponse> removeTags(@PathVariable Long materialId, 
             @Valid @RequestBody TagRequest request,
@@ -78,7 +77,7 @@ public class MaterialTagController {
         }
     }
     
-    @GetMapping("/search/{tag}")
+    @GetMapping("/api/tags/search/{tag}")
     @PreAuthorize("hasAnyAuthority('SCOPE_USER','SCOPE_ADMIN')")
     public ResponseEntity<List<Tags>> findMaterialByTags(@PathVariable String tag) {
         try {
@@ -89,7 +88,7 @@ public class MaterialTagController {
         }   
     }
     
-    @GetMapping("/unique")
+    @GetMapping("/api/tags/unique")
     @PreAuthorize("hasAnyAuthority('SCOPE_USER','SCOPE_ADMIN')")
     public ResponseEntity<List<String>> getAllUniqueTags() {
         try {
@@ -101,7 +100,7 @@ public class MaterialTagController {
         }
     }
     
-    @GetMapping("/count/{tag}")
+    @GetMapping("/api/tags/count/{tag}")
     @PreAuthorize("hasAnyAuthority('SCOPE_USER','SCOPE_ADMIN')")
     public ResponseEntity<Long> countTags(@PathVariable String tag) {
         try {
@@ -112,7 +111,7 @@ public class MaterialTagController {
         }
     }
     
-    @PutMapping
+    @PutMapping("/api/materials/{materialId}/tags")
     @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN')")
     public ResponseEntity<TagResponse> updateTags(@PathVariable Long materialId,
             @Valid @RequestBody TagRequest request,

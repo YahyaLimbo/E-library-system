@@ -81,7 +81,11 @@ public class MaterialTagService {
     
     @Transactional(readOnly = true)
     public List<Tags> findMaterialsByTag(String tag) {
-        return materialTagRepository.findByTags(tag);
+        List<Tags> allTags = materialTagRepository.findAll();
+        List<Tags> results = allTags.stream()
+                .filter(tags ->tags.getTags()!=null &&tags.getTags().contains(tag.toLowerCase()))
+                .collect(Collectors.toList());
+        return results;
     }
     
     @Transactional(readOnly = true)
@@ -95,7 +99,11 @@ public class MaterialTagService {
     
     @Transactional(readOnly = true)
     public Long countTags(String tag) {
-        return materialTagRepository.countByTags(tag); 
+        // Temporary implementation using in-memory count
+        List<Tags> allTags = materialTagRepository.findAll();
+        return allTags.stream()
+                .filter(tags -> tags.getTags().contains(tag.toLowerCase()))
+                .count();
     }
     
     public Tags updateTags(Long materialId, List<String> newTags) {

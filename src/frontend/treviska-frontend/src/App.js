@@ -1,20 +1,16 @@
-import logo from './logo.svg';
 import './App.css';
-
+import Navbar from './components/Navbar/Navbar.js';
+import Header from './components/Navbar/Navbar.js';
+//import later components here
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 function App() {
   return (
     <div className="App">
-      <header className="App-header"></header>
-      <form>
-        <label htmlFor="username">Username:</label>
-        <input type="text" id="username" name="username" placeholder="Username" />
-        <label htmlFor="password">Password:</label>
-        <input type="password" id="password" name="password" placeholder="Password" />
-        <button type="submit">Login</button>
-        <button type="button">Register</button>
-        <button type="button">Forgot Password</button>
-        
-      </form>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Navbar />} />
+        </Routes>
+      </Router>
     </div>
   );
 }

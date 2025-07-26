@@ -2,37 +2,119 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #0bcf6081;
-  padding: 0.5rem 50em;
+  background: #09c85c81;
+  padding: 2rem 45rem;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  position: relative;
+  min-height: 60px; 
 }
 
 .navbar-brand {
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: bold;
+  position: absolute;
+  left:150px;
+  top: 50%;
+  transform: translateY(-50%); 
 }
-
 .brand-link {
   text-decoration: none;
-  color: #333;
+  color: #000000;
+  font-family: 'Sora', sans-serif;
+  font-size: 2.5rem;                   
+  text-decoration: none;     
+  letter-spacing: 0.5px;     
+  transition: color 0.3s ease;
+  display: flex; /* This makes items flow horizontally */
+  align-items: center; /* This centers them vertically */
+  gap: 8px; /* This adds space between icon and text */
+  flex-direction: row; /* This explicitly sets left-to-right order */
 }
+
+.brand-icon {
+  width: 40px;
+  height: 40px;
+  padding: 3px;
+  fill: currentColor; 
+  transition: all 0.3s ease;
+  order: 0;
+}
+
 
 .navbar-auth {
   display: flex;
-  gap: 1rem;
+  align-items: center;
+  padding: 5px;
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-top: -30px;
+  margin-right: 20px;
+  gap:0;
+  background: #09c85c81;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  border-radius: 24px;
+
 }
 
 .auth-link {
+  padding: 8px 16px;
+  border-radius: 5px;
+  text-decoration: none; 
+  color: rgb(0, 0, 0); 
+  position: relative;
+}
+.user-icon {
+  width: 24px !important;  /* Override the size prop */
+  height: 24px !important; /* Override the size prop */
+  color: #000;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+
+
+
+.navbar-container {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  right: 5px;
+  top: 100%; 
+  margin-top: 10px; 
+}
+
+.navbar-menu-icon {
+  cursor: pointer;
+  margin-left: 1rem;
+}
+
+.menu-icon {
+  color: #333;
+}
+
+.topnav {
+  display: flex;
+  gap: 15px;
+  padding: 20px 0;
+  margin: 20px;
+  margin-top: -70px;
+  margin-right :-20px;
+}
+
+.topnav a {
   text-decoration: none;
+  color: #333;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.topnav a.active {
+  background-color: rgba(0, 123, 255, 0.1);
   color: #007bff;
-  font-weight: 500;
-  transition: color 0.2s;
 }
-
-.auth-link:hover {
-  color: #0056b3;
-}
-
 
 .menu-link {
   text-decoration: none;
@@ -43,11 +125,6 @@
 
 .menu-link:hover {
   color: #007bff;
-}
-
-.navbar-container {
-  display: flex;
-  align-items: center;
 }
 
 .navbar-menu-icon {

@@ -1,6 +1,8 @@
 import './App.css';
 import Navbar from './components/Navbar/Navbar.js';
-import Header from './components/Navbar/Navbar.js';
+import Searchbar from './components/Searchbar/Searchbar.js';
+import React from 'react';
+import Landingpage from './pages/LandingPage.js';
 //import later components here
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 function App() {
@@ -8,7 +10,7 @@ function App() {
     <div className="App">
       <Router>
         <Routes>
-          <Route path="/" element={<Navbar />} />
+          <Route path="/" element={<Landingpage />} />
         </Routes>
       </Router>
     </div>

@@ -65,7 +65,7 @@ public class Material {
     // Enums matching your database schema
     public enum MaterialType {
         book, journal, magazine, newspaper, researchpaper,
-        Magazine, Thesis, ConferencePaper, Referencematerial,
+        thesis, ConferencePaper, Referencematerial,
         database, Archive, dataset, audioBook
     }
     

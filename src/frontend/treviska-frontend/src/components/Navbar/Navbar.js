@@ -20,7 +20,7 @@ const Navbar = () => {
     Treviska</a>
     </div>
     <div className="navbar-auth">
-      <User className="user-icon" size={20} strokeWidth={0.5} absoluteStrokeWidth />
+      <User className="user-icon" size={20} strokeWidth={1} absoluteStrokeWidth />
       <a href="/login" className="auth-link">Login</a>
       <a href="/register" className="auth-link">Register</a>
     </div>

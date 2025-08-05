@@ -5,7 +5,8 @@ import './Homepage.css';
 const Homepage = () => {
     const newMaterialsRef = useRef(null);
     const popularMaterialsRef = useRef(null);
-// make the buttons work
+// example of books layout displayed
+//directional buttons are not working, need to review it
     const newMaterials = [
         { id: 1, title: "The Great Gatsby", author: "F. Scott Fitzgerald", cover: "/images/book1.jpg" },
         { id: 2, title: "To Kill a Mockingbird", author: "Harper Lee", cover: "/images/book2.jpg" },

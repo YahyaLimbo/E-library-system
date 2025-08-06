@@ -7,7 +7,6 @@ const Sidebar = () => {
     return (
         <div className="sidebar">
             <div className="sidebar-content">
-                {/* Popular Categories Section */}
                 <div className="categories-section">
                     <h1 className="sidebar-title">Material List</h1>
                     <nav className="sidebar-nav">

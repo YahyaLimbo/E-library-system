@@ -18,7 +18,9 @@ const Profile = () => {
                 </div>
             </div>
             <div className="profile-section">
-                <h2 className="section-title">Account Settings</h2>
+                <h3 className="section-title">Account Settings</h3>
+                <h3 className ="section-title">Account History</h3>
+                <h3 className ="section-title">My Collection</h3>
                 <div className="settings-content">
                 </div>
             </div>

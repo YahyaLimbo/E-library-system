@@ -13,7 +13,6 @@ const LandingPage = () => {
     <div className="LandingPage">
         <Navbar />
         <Searchbar />
-          <Sidebar/>
           <Homepage/>
         </div>
   );

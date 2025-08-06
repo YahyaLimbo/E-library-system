@@ -1,11 +1,13 @@
 import React,{ useState } from 'react';
-import { Menu, X, ChevronDown, CircleUserRound, Search,User } from 'lucide-react';
+import { Menu,User } from 'lucide-react';
 import './Navbar.css';
 import '@fontsource/sora';
+import Sidebar from '../Sidebar/Sidebar';
 
-//declare a const mobilemenu false and setMobileMenu to setMobileMenu
 const Navbar = () => {
+  const [menuOpened,setMenuOpened]= useState(false);
   return (
+    <>
     <div className="navbar">
     <div className="navbar-brand">
       <a href="/" className="brand-link">
@@ -25,27 +27,21 @@ const Navbar = () => {
       <a href="/register" className="auth-link">Register</a>
     </div>
     <div className ="navbar-container">
-     {/* <div className="navbar-menu-icon">
+          
+          <div className = "topnav">
+            <a href="#home">Home</a>
+            <a href="collection">My Collection</a>
+            <button onClick={()=>setMenuOpened(!menuOpened)}>
         <Menu 
             size={24} 
             className="menu-icon"
           />
-          <CircleUserRound
-          size={24}
-          className="menu-icon"/>
-          <Search
-            size={24}
-            className="menu-icon"
-          />*/}
-          
-          <div className = "topnav">
-            <a href="#home">Home</a>
-            <a href="#about">My Collection</a>
-            <a href ="#about"> About</a>  
-            <a href="#contact"></a>
+          </button>
   </div>
       </div>
     </div>
+     {menuOpened && <Sidebar/>}
+     </>
   );
 };
 

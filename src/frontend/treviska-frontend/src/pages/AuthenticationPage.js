@@ -3,7 +3,6 @@ import Navbar from "../components/Navbar/Navbar";
 import Searchbar from "../components/Searchbar/Searchbar";
 import Auth from "../components/Authentication/Auth";
 
-//import later components here
 
 
 const AuthenticationPage = () => {

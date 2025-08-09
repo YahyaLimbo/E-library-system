@@ -8,6 +8,9 @@ export const authService = {
       
       if (token) {
         localStorage.setItem('token', token);
+        console.log('🚀 Token saved, dispatching authStateChanged event');
+        // Dispatch custom event to notify components of auth state change
+        window.dispatchEvent(new Event('authStateChanged'));
       }
       
       return response.data;
@@ -18,6 +21,8 @@ export const authService = {
 
   logout: () => {
     localStorage.removeItem('token');
+    // Dispatch custom event to notify components of auth state change
+    window.dispatchEvent(new Event('authStateChanged'));
   },
 
   getCurrentUser: () => {

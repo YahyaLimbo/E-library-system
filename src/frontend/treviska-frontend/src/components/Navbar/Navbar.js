@@ -1,11 +1,79 @@
-import React,{ useState } from 'react';
-import { Menu,User } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Menu, User, LogOut, Settings } from 'lucide-react';
 import './Navbar.css';
 import '@fontsource/sora';
 import Sidebar from '../Sidebar/Sidebar';
+import { authService } from '../../services/authService';
+import apiClient from '../../services/apiConfig';
 
 const Navbar = () => {
-  const [menuOpened,setMenuOpened]= useState(false);
+  const [menuOpened, setMenuOpened] = useState(false);
+  const [user, setUser] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+
+  useEffect(() => {
+    checkAuthStatus();
+
+    // Listen for custom auth events (for same-tab changes)
+    const handleAuthChange = () => {
+      console.log('🔔 Auth state changed event received');
+      checkAuthStatus();
+    };
+
+    // Listen for window focus (when user comes back to the page)
+    const handleWindowFocus = () => {
+      console.log('👁️ Window focused, checking auth');
+      checkAuthStatus();
+    };
+
+    window.addEventListener('authStateChanged', handleAuthChange);
+    window.addEventListener('focus', handleWindowFocus);
+
+    return () => {
+      window.removeEventListener('authStateChanged', handleAuthChange);
+      window.removeEventListener('focus', handleWindowFocus);
+    };
+  }, []);
+
+  const checkAuthStatus = async () => {
+    console.log('🔍 Checking auth status...');
+    const token = localStorage.getItem('token');
+    console.log('🎫 Token found:', !!token);
+    
+    if (!token) {
+      console.log('❌ No token, setting unauthenticated');
+      setIsAuthenticated(false);
+      setUser(null);
+      return;
+    }
+
+    try {
+      console.log('📡 Making request to /user/me via apiClient');
+      const response = await apiClient.get('/user/me');
+      
+      console.log('✅ User data received:', response.data);
+      setUser(response.data);
+      setIsAuthenticated(true);
+    } catch (error) {
+      console.error('💥 Error checking auth status:', error);
+      // apiClient already handles token removal on 401
+      setIsAuthenticated(false);
+      setUser(null);
+    }
+  };
+
+  const handleLogout = () => {
+    authService.logout();
+    setUserDropdownOpen(false);
+    // The authStateChanged event will automatically update the navbar
+  };
+
+  const handleProfile = () => {
+    setUserDropdownOpen(false);
+    // Navigate to profile page - you can add navigation logic here
+    console.log('Navigate to profile');
+  };
   return (
     <>
     <div className="navbar">
@@ -23,14 +91,39 @@ const Navbar = () => {
     </div>
     <div className="navbar-auth">
       <User className="user-icon" size={20} strokeWidth={1} absoluteStrokeWidth />
-      <a href="/login" className="auth-link">Login</a>
-      <a href="/register" className="auth-link">Register</a>
+      {isAuthenticated ? (
+        <div className="user-dropdown">
+          <button 
+            className="username-button"
+            onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+          >
+            <span className="username-display">{user?.username}</span>
+          </button>
+          
+          {userDropdownOpen && (
+            <div className="dropdown-menu">
+              <button className="dropdown-item" onClick={handleProfile}>
+                <Settings size={16} />
+                <span>Profile</span>
+              </button>
+              <button className="dropdown-item" onClick={handleLogout}>
+                <LogOut size={16} />
+                <span>Logout</span>
+              </button>
+            </div>
+          )}
+        </div>
+      ) : (
+        <>
+          <a href="/login" className="auth-link">Login</a>
+          <a href="/register" className="auth-link">Register</a>
+        </>
+      )}
     </div>
     <div className ="navbar-container">
           
           <div className = "topnav">
-            <a href="#home">Home</a>
-            <a href="collection">My Collection</a>
+            <a href="/">Home</a>
             <button onClick={()=>setMenuOpened(!menuOpened)}>
         <Menu 
             size={24} 
